@@ -3,6 +3,7 @@ name: "Prepare release artifacts"
 on:
   push:
     tags: [ "v*" ]
+  workflow_dispatch:
 
 permissions:
   id-token: write
@@ -13,7 +14,7 @@ permissions:
 jobs:
   artifact-builder-x86:
     name: "Prepare release artifacts (x86)"
-    if: github.ref_type == 'tag'
+    if: github.ref_type == 'tag' || github.event_name == 'workflow_dispatch'    
     runs-on: ubuntu-latest
     container:
       image: "alpine:edge"
@@ -57,7 +58,7 @@ jobs:
           subject-path: '~/maddy-x86_64-linux-musl.tar.zst'
   artifact-builder-arm:
     name: "Prepare release artifacts (aarch64)"
-    if: github.ref_type == 'tag'
+    if: github.ref_type == 'tag' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-22.04-arm
     steps:
       - name: Checkout
